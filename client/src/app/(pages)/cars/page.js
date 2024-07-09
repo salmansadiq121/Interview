@@ -53,7 +53,7 @@ export default function Cars() {
 
   // Handle Logout
   const handleLogout = () => {
-    route.push("/");
+    router.push("/");
     setAuth({ ...auth, user: "", token: "" });
     localStorage.clear("auth");
     toast.success("Logout successfully!");
