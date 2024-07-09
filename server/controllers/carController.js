@@ -4,7 +4,7 @@ import userModel from "../models/userModel.js";
 
 export const uploadCarModel = async (req, res) => {
   try {
-    const { userId, carModel, price, phone, images } = req.body;
+    const { userId, carModel, price, phone, images, city } = req.body;
 
     // Validate
     const requiredFields = [
@@ -37,6 +37,7 @@ export const uploadCarModel = async (req, res) => {
       price,
       phone,
       images,
+      city,
     });
 
     res.status(200).send({

@@ -20,6 +20,10 @@ const carModelSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    city: {
+      type: String,
+      required: true,
+    },
     images: [
       {
         type: String,

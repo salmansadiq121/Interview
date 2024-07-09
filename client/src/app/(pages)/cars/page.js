@@ -16,10 +16,6 @@ export default function Cars() {
   const [isLoading, setIsLoading] = useState(false);
   const [carData, setCarData] = useState([]);
   const [isDetail, setIsDetails] = useState(false);
-  // const [carModel, setCarModel] = useState("");
-  // const [price, setPrice] = useState("");
-  // const [phone, setPhone] = useState("");
-  // const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (!auth.token) {
@@ -83,7 +79,10 @@ export default function Cars() {
             Cars Models
           </h1>
           <div className="w-full flex items-center justify-end  mr-2 sm:mr-8 pb-5">
-            <button className="py-[.4rem] px-4 rounded-[.5rem] cursor-pointer shadow-md shadow-gray-100 hover:shadow-gray-300 transition-all duration-150 flex items-center justify-center text-white bg-sky-600 hover:bg-sky-700">
+            <button
+              className="py-[.4rem] px-4 rounded-[.5rem] cursor-pointer shadow-md shadow-gray-100 hover:shadow-gray-300 transition-all duration-150 flex items-center justify-center text-white bg-sky-600 hover:bg-sky-700"
+              onClick={() => router.push("/uploadModel")}
+            >
               <FiPlus className="h-4 w-4 text-white" /> Add New
             </button>
           </div>
