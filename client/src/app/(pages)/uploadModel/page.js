@@ -92,7 +92,11 @@ export default function AddNewRecord() {
       .then((uploadedImages) => {
         const imageUrls = uploadedImages.map((data) => data.url.toString());
         console.log("Files:", imageUrls);
-        setImages((prevImages) => [...prevImages, ...imageUrls]);
+          setImages((prevImages) => {
+    const newImages = [...prevImages, ...imageUrls];
+    return newImages.slice(0, selectedCopies);
+  });
+        // setImages((prevImages) => [...prevImages, ...imageUrls]);
         setLoad(false);
       })
       .catch((error) => {
