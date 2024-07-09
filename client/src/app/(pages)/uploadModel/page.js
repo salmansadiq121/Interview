@@ -134,7 +134,7 @@ export default function AddNewRecord() {
 
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URI}/api/v1/cars/upload_model`,
-        { carModel, price, phone, images, userId: auth.user.id }
+        { carModel, price, phone, images, userId: auth.user.id, city:selectedCity }
       );
 
       if (data?.success) {
