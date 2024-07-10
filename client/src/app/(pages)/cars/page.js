@@ -9,13 +9,16 @@ import { FiPlus } from "react-icons/fi";
 import axios from "axios";
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
+import Carousel from "@/app/components/Carousel";
 
 export default function Cars() {
   const { auth, setAuth } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [Loading, setLoading] = useState(false);
   const [carData, setCarData] = useState([]);
   const [isDetail, setIsDetails] = useState(false);
+  const [carDetail, setCarDetail] = useState([]);
 
   useEffect(() => {
     if (!auth.token) {
@@ -51,9 +54,27 @@ export default function Cars() {
     getCarModels();
   }, []);
 
+  // Get Single Car
+  const getCarDetail = async (id) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URI}/api/v1/cars/single_Model/${id}`
+      );
+      setCarDetail(data.car);
+      console.log("cars:", data);
+      console.log("carsD:", carDetail);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
   // Handle Logout
   const handleLogout = () => {
-    route.push("/");
+    router.push("/");
     setAuth({ ...auth, user: "", token: "" });
     localStorage.clear("auth");
     toast.success("Logout successfully!");
@@ -93,18 +114,19 @@ export default function Cars() {
                 <div
                   className="w-full h-full rounded-md shadow-md border bg-gray-100 border-gray-300 overflow-hidden  shadow-gray-100 hover:shadow-gray-300 transition-all duration-150 cursor-pointer"
                   key={item?._id}
-                  onClick={() => setIsDetails(true)}
+                  onClick={() => {
+                    getCarDetail(item?._id), setIsDetails(true);
+                  }}
                 >
                   <div className="w-full h-[15rem] relative">
                     <Image src={item?.images[0]} fill alt="Banner" />
                   </div>
                   <div className="flex flex-col gap-2 px-4 py-4">
-                    <h3 className="font-medium text-black text-[18px]">
+                    <h3 className="font-[500] text-black text-[18px]">
                       {item?.carModel}
                     </h3>
-                    <span>
-                      <b className="text-black font-medium">Price</b>: $
-                      {item?.price}
+                    <span className="text-lg font-medium text-sky-600">
+                      ${item?.price}
                     </span>
                   </div>
                 </div>
@@ -116,14 +138,37 @@ export default function Cars() {
       {/* Details */}
       {isDetail && (
         <div className="fixed top-0 right-0 py-4 px-4 w-full h-full z-[9] bg-black/70 flex items-center justify-center">
-          <div className="py-4 px-4 w-[22rem] sm:w-[35rem] rounded-lg bg-white relative">
-            <span
-              className="absolute top-3 right-3 cursor-pointer z-[10]"
-              onClick={() => setIsDetails(false)}
-            >
-              <IoClose className="h-6 w-6 text-black cursor-pointer" />
-            </span>
-          </div>
+          {Loading ? (
+            <Loader />
+          ) : (
+            <div className="py-4 px-4 w-[22rem] sm:w-[37rem] overflow-hidden rounded-lg bg-white relative">
+              <span
+                className="absolute top-2 right-3 cursor-pointer z-[10]"
+                onClick={() => setIsDetails(false)}
+              >
+                <IoClose className="h-6 w-6 text-black cursor-pointer" />
+              </span>
+              <div className="flex flex-col gap-4 mt-4">
+                <Carousel banners={carDetail?.images} />
+                <div className="flex flex-col gap-2 px-4 py-4">
+                  <h3 className="font-[500] text-black text-[20px]">
+                    {carDetail?.carModel}
+                  </h3>
+                  <span className="text-lg font-medium w-fit text-sky-600 py-[.25rem] px-5 bg-sky-600/10 rounded-[1.5rem]">
+                    ${carDetail?.price}
+                  </span>
+                  <div className="flex items-center  justify-between gap-4">
+                    <span className="text-lg font-medium w-fit text-gray-800">
+                      {carDetail?.city}
+                    </span>
+                    <span className="text-lg font-medium w-fit text-gray-800  ">
+                      {carDetail?.phone}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
