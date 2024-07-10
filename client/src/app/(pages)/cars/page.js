@@ -118,7 +118,7 @@ export default function Cars() {
                     getCarDetail(item?._id), setIsDetails(true);
                   }}
                 >
-                  <div className="w-full h-[15rem] relative">
+                  <div className="w-full h-[15rem] relative border-b border-gray-200">
                     <Image src={item?.images[0]} fill alt="Banner" />
                   </div>
                   <div className="flex flex-col gap-2 px-4 py-4">
